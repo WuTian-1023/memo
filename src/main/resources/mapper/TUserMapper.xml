@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wlq.memoapi.api.mapper.TUserMapper">
+
+    <resultMap id="BaseResultMap" type="com.wlq.memoapi.api.domain.TUser">
+            <id property="userId" column="user_id" jdbcType="INTEGER"/>
+            <result property="password" column="password" jdbcType="VARCHAR"/>
+            <result property="name" column="name" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        user_id,password,name
+    </sql>
+
+    <select id="getUserFindById" resultType="com.wlq.memoapi.api.domain.TUser">
+        select
+        <include refid="Base_Column_List"/>
+            from t_user where user_id = #{userid}
+    </select>
+
+</mapper>

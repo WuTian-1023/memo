@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wlq.memoapi.api.mapper.TBorrowRecordMapper">
+
+    <resultMap id="BaseResultMap" type="com.wlq.memoapi.api.domain.TBorrowRecord">
+            <result property="archivesName" column="archives_name" jdbcType="VARCHAR"/>
+            <result property="filesBorrowUsername" column="files_borrow_username" jdbcType="VARCHAR"/>
+            <result property="filesBorrowTime" column="files_borrow_time" jdbcType="TIMESTAMP"/>
+            <result property="returnTime" column="return_time" jdbcType="TIMESTAMP"/>
+            <result property="status" column="status" jdbcType="VARCHAR"/>
+            <result property="uuid" column="uuid" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        archives_name as archivesName,files_borrow_username as filesBorrowUsername,files_borrow_time as filesBorrowTime,
+        return_time as returnTime,status,uuid
+    </sql>
+
+    <update id="restitution">
+        update t_borrow_record set status ='02' , return_time = now() where uuid = #{serialNo}
+    </update>
+
+
+    <select id="getRegistrationStatusToday" resultType="java.util.Map">
+        SELECT
+            COUNT(CASE WHEN DATE(files_borrow_time) = CURDATE() THEN 1 END) AS borrowedToday,
+            COUNT(CASE WHEN DATE(return_time) = CURDATE() THEN 1 END) AS returnedToday,
+            COUNT(CASE WHEN status = '01' AND return_time IS NULL THEN 1 END) AS pendingReturn
+        FROM t_borrow_record
+    </select>
+</mapper>
